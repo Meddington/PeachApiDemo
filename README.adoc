@@ -1,0 +1,13 @@
+== Peach API Security Demo Repo
+
+This repository contains a demonstration target.
+
+Stack:
+* Python 2.7
+* Flask
+* SQLite
+
+Automated tests:
+* pytest
+* custom
+
