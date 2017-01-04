@@ -22,10 +22,10 @@ def Home():
     
     return data, 200, {'Content-Type':'text/html'}
 
-@app.route("/api/.htaccess")
-def FakeHtAccess():
-    data = "look out, it's and .htaccess file!"
-    return data, 200, {'Content-Type':'text/html'}
+#@app.route("/api/.htaccess")
+#def FakeHtAccess():
+#    data = "look out, it's and .htaccess file!"
+#    return data, 200, {'Content-Type':'text/html'}
 
 class ApiRoot(Resource):
     def get(self):
@@ -46,6 +46,9 @@ class ApiUsers(Resource):
         return False
     
     def get(self):
+        if not self.validateToken():
+            abort(401)
+
         # Comment out auth check to trigger chail failure
         #if not self.validateToken():
         #    abort(401)
@@ -76,6 +79,7 @@ class ApiUsers(Resource):
             conn.close()
         
         # Trigger sensitive information disclosure checks
+        '''
         if random.randint(0,10) == 1:
             flip = random.randint(0,1)
             if flip == 0:
@@ -84,10 +88,12 @@ class ApiUsers(Resource):
                 return "Blah blah blah. Version: 1.1.1 Other other other", 200, {'Content-Type':'text/html'}
             
             return "Blah blah blah Stack trace: xxxxxx Ohter other other", 200, {'Content-Type':'text/html'}
-        
+        '''
+
         return users
         
     def post(self):
+        # Comment out for missing authentication vuln
         if not self.validateToken():
             abort(401)
         
@@ -95,16 +101,15 @@ class ApiUsers(Resource):
         
         logger.info("Creating new user '%s'"%json["user"])
         
-        #for x in ['user', 'first', 'last', 'password']:
-        #    if json[x] == "'":
-        #        logger.info("SQL INJECTION ATTACK ON USER: %s" % json[x] )
-        
         user_id = -1
         conn = GetConnection()
         try:
             c = conn.cursor()
-            c.execute("insert into users (user, first, last, password) values ('%s', '%s', '%s', '%s')" % (
-                json['user'], json['first'], json['last'], json['password'] ))
+            # SQL Injection Example
+            #c.execute("insert into users (user, first, last, password) values ('%s', '%s', '%s', '%s')" % (
+            #    json['user'], json['first'], json['last'], json['password'] ))
+            c.execute("insert into users (user, first, last, password) values (?, ?, ?, ?)",
+                (json['user'], json['first'], json['last'], json['password'] ))
             user_id = c.lastrowid
             conn.commit()
             
@@ -121,7 +126,6 @@ class ApiUsers(Resource):
     def delete(self):
         if not self.validateToken():
             abort(401)
-        
         
         user = request.args.get('user')
         

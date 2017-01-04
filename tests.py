@@ -25,10 +25,6 @@ def setup_function(self):
 	'''
 	
 	try:
-		delete(target+'/api/users/2', **req_args)
-	except:
-		pass
-	try:
 		delete(target+'/api/users?user=dd', **req_args)
 	except:
 		pass
@@ -39,40 +35,16 @@ def teardown_function(self):
 	'''
 	
 	try:
-		delete(target+'/api/users/2', **req_args)
-	except:
-		pass
-	try:
 		delete(target+'/api/users?user=dd', **req_args)
 	except:
 		pass
-
-	pass
-	
-def test_users_getall():
-	get(target+'/api/users', **req_args)
 
 def test_user_create():
 	r = post(target+'/api/users',
 		 data=json.dumps({"user":"dd", "first":"mike", "last":"smith", "password":"hello"}),
 		 **req_args)
 	user = r.json()
-	get(target+'/api/users', **req_args)
-	get(target+'/api/users/%d' % user['user_id'], **req_args)
-	delete(target+'/api/users/%d' % user['user_id'], **req_args)
-
-def test_user_update():
-	r = post(target+'/api/users',
-		data=json.dumps({"user":"dd", "first":"mike", "last":"smith", "password":"hello"}),
-		**req_args)
-	user = r.json()
-	get(target+'/api/users/%d' % user['user_id'], **req_args)
-	put(target+'/api/users/%d' % user['user_id'],
-	    data=json.dumps({"user":"dd", "first":"mike", "last":"smith", "password":"hello"}),
-	    **req_args)
-	delete(target+'/api/users/%d' % user['user_id'], **req_args)
-	get(target+'/api/users', **req_args)
-
+	assert int(user['user_id']) > -1
 
 if __name__ == "__main__":
 	print()
