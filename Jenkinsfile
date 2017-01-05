@@ -4,8 +4,8 @@ node {
     stage('Build')
     {
         sh "virtualenv venv --distribute"
-        sh ". venv/bin/activate ; pip install -r /opt/sdk/libraries/python/requirements.txt"
-        sh ". venv/bin/activate ; pip install -r requirements.txt"
+        sh ". venv/bin/activate ; ./venv/bin/pip install -r /opt/sdk/libraries/python/requirements.txt"
+        sh ". venv/bin/activate ; ./venv/bin/pip install -r requirements.txt"
     }
     stage('Test')
     {
@@ -13,7 +13,7 @@ node {
         {
             // Start target service
             sh "killall python || true"
-            sh ". venv/bin/activate ; BUILD_ID=dontKillMe python rest_target.py &"
+            sh ". venv/bin/activate ; BUILD_ID=dontKillMe ./venv/bin/python rest_target.py &"
 
             // Automated tests
             sh ". venv/bin/activate ; pytest --junitxml test_target.xml tests.py"
@@ -38,7 +38,7 @@ node {
                 "PEACH_UI=http://52.52.169.252:5000 " +
                 "PEACH_JUNIT=$WORKSPACE/peach-web_test_target.xml " +
                 "PEACH_VERBOSE=True "+
-                "/usr/bin/python /opt/sdk/ci/generic/peach_ci_runner.py"
+                "./venv/bin/python /opt/sdk/ci/generic/peach_ci_runner.py"
         }
         catch(err)
         {
