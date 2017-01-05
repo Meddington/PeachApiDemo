@@ -1,9 +1,9 @@
-#/bin/sh
+#!/bin/bash
 
 # Install python requirements
 # Launch target
 
-virtualenv venv --distribute
+virtualenv venv
 source venv/bin/activate
 
 pip install pytest
