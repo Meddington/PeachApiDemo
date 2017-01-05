@@ -3,20 +3,14 @@ node {
 
     stage('Build')
     {
-        sh "virtualenv venv --distribute"
-        sh ". venv/bin/activate ; ./venv/bin/pip install -r /opt/sdk/libraries/python/requirements.txt"
-        sh ". venv/bin/activate ; ./venv/bin/pip install -r requirements.txt"
+        sh "./build.sh"
     }
     stage('Test')
     {
         try
         {
             // Start target service
-            sh "killall python || true"
-            sh ". venv/bin/activate ; BUILD_ID=dontKillMe ./venv/bin/python rest_target.py &"
-
-            // Automated tests
-            sh ". venv/bin/activate ; pytest --junitxml test_target.xml tests.py"
+            sh "./test.sh"
         }
         catch(err)
         {
@@ -43,7 +37,6 @@ node {
         catch(err)
         {
             junit healthScaleFactor: 100.0, testResults: '*.xml'
-            sh "killall python || true"
             throw err
         }
         finally
