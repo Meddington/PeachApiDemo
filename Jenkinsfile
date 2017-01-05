@@ -1,11 +1,11 @@
 node {
    checkout scm
 
-   stage('Build')
+   stage('Build and Test')
    {
        try
        {
-        sh "/opt/build.sh"
+        sh "build.sh"
        }
        catch(err)
        {
@@ -14,17 +14,10 @@ node {
 	   
 	   //sleep(5 * 60)// * 1000)
    }
-   stage('Test')
-   {
-       echo "Testing..."
-   }
    stage('Peach API Security')
    {
-   
        try
        {
-           sh "ls"
-           sh "ls -R"
             sh "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
             "PEACH_PROFILE=Quick " +
             "PEACH_CONFIG=/opt/sdk/testrunners/custom/python/peach-web.project " +
