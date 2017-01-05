@@ -109,7 +109,7 @@ class ApiUsers(Resource):
                 c = conn.cursor()
                 for row in c.execute("select count(user_id) from users where user = ?", (json['user'],)):
                     logger.info('Row count: %d' % int(row[0]))
-                    if int(row[0]) == 0:
+                    if int(row[0]) > 0:
                         logger.error('User already exists')
                         abort(400, message = "User already exists found.")
 
