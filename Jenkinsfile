@@ -3,8 +3,9 @@ node {
 
     stage('Build')
     {
-        sh "pip install -r /opt/sdk/libraries/python/requirements.txt"
-        sh "pip install -r requirements.txt"
+        sh "virtualenv venv --distribute"
+        sh ". venv/bin/activate ; pip install -r /opt/sdk/libraries/python/requirements.txt"
+        sh ". venv/bin/activate ; pip install -r requirements.txt"
     }
     stage('Test')
     {
@@ -12,10 +13,10 @@ node {
         {
             // Start target service
             sh "killall python || true"
-            sh "BUILD_ID=dontKillMe python rest_target.py &"
+            sh ". venv/bin/activate ; BUILD_ID=dontKillMe python rest_target.py &"
 
             // Automated tests
-            sh "pytest --junitxml test_target.xml tests.py"
+            sh ". venv/bin/activate ; pytest --junitxml test_target.xml tests.py"
         }
         catch(err)
         {
@@ -29,7 +30,8 @@ node {
     {
         try
         {
-            sh  "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
+            sh  ". venv/bin/activate ; " +
+                "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
                 "PEACH_PROFILE=Quick " +
                 "PEACH_CONFIG=/opt/sdk/testrunners/custom/python/peach-web.project " +
                 "PEACH_API=http://127.0.0.1:5000 " +
