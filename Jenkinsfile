@@ -31,7 +31,7 @@ node {
                 "PEACH_API=http://127.0.0.1:5000 " +
                 "PEACH_UI=http://52.52.169.252:5000 " +
                 "PEACH_JUNIT=$WORKSPACE/peach-web_test_target.xml " +
-                "PEACH_VERBOSE=True "+
+                "PEACH_VERBOSE=False "+
                 "$WORKSPACE/peach.sh"
         }
         catch(err)
