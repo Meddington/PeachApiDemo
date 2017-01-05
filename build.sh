@@ -3,7 +3,7 @@
 # Install python requirements
 # Launch target
 
-virtualenv venv
+virtualenv --system-site-packages venv
 source venv/bin/activate
 
 pip install pytest
