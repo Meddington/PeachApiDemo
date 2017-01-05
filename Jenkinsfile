@@ -1,19 +1,29 @@
 node {
     checkout scm
 
-    stage('Build and Test')
+    stage('Build')
+    {
+        sh "pip install -r /opt/sdk/libraries/python/requirements.txt"
+        sh "pip install -r requirements.txt"
+    }
+    stage('Test')
     {
         try
         {
-            sh "chmod u+x build.sh"
-            sh "$WORKSPACE/build.sh"
+            // Start target service
+            sh "killall python || true"
+            sh "BUILD_ID=dontKillMe python rest_target.py &"
+
+            // Automated tests
+            sh "pytest --junitxml test_target.xml tests.py"
         }
         catch(err)
         {
             junit '*.xml'
-        }
+            sh "killall python || true"
 
-        //sleep(5 * 60)// * 1000)
+            throw err
+        }
     }
     stage('Peach API Security')
     {
@@ -31,14 +41,16 @@ node {
         catch(err)
         {
             junit healthScaleFactor: 100.0, testResults: '*.xml'
+            sh "killall python || true"
             throw err
         }
-
-        //sleep(7 * 60)// * 1000)
+        finally
+        {
+            sh "killall python || true"
+        }
     }
     stage('Deploy')
     {
         echo "Deploying..."
-        //sleep(5 * 60)// * 1000)
     }
 }
