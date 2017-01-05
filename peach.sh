@@ -12,6 +12,8 @@ pip install -r requirements.txt
 cd /opt/sdk/testrunners/pytest-peach/src
 python setup.py install
 
+cd $WORKSPACE
+
 python /opt/sdk/ci/generic/peach_ci_runner.py
 
 # end
