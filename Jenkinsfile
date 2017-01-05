@@ -25,7 +25,7 @@ node {
     {
         try
         {
-            sh  ". venv/bin/activate ; " +
+            sh  "source venv/bin/activate ; " +
                 "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
                 "PEACH_PROFILE=Quick " +
                 "PEACH_CONFIG=/opt/sdk/testrunners/custom/python/peach-web.project " +
