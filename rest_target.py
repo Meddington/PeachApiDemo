@@ -104,22 +104,37 @@ class ApiUsers(Resource):
         user_id = -1
         conn = GetConnection()
         try:
-            c = conn.cursor()
-            # SQL Injection Example
-            #c.execute("insert into users (user, first, last, password) values ('%s', '%s', '%s', '%s')" % (
-            #    json['user'], json['first'], json['last'], json['password'] ))
-            c.execute("insert into users (user, first, last, password) values (?, ?, ?, ?)",
-                (json['user'], json['first'], json['last'], json['password'] ))
-            user_id = c.lastrowid
-            conn.commit()
+            # Check to see if user already exists
+            try:
+                c = conn.cursor()
+                c.execute("select user_id from users where user = ?", (json['user'],))
+                
+                if c.rowcount > 0:
+                    abort(400, message = "User not found.")
+
+            except HTTPException, e:
+                raise e
+            except Exception, e:
+                logger.error('Error creating user: ' + str(e))
+                abort(500)
+
+            try:
+                c = conn.cursor()
+                # SQL Injection Example
+                #c.execute("insert into users (user, first, last, password) values ('%s', '%s', '%s', '%s')" % (
+                #    json['user'], json['first'], json['last'], json['password'] ))
+                c.execute("insert into users (user, first, last, password) values (?, ?, ?, ?)",
+                    (json['user'], json['first'], json['last'], json['password'] ))
+                user_id = c.lastrowid
+                conn.commit()
+                
+                return {'user_id': user_id}, 201
             
-            return {'user_id': user_id}, 201
-        
-        except HTTPException, e:
-            raise e
-        except Exception, e:
-            logger.error('Error creating user: ' + str(e))
-            abort(500)
+            except HTTPException, e:
+                raise e
+            except Exception, e:
+                logger.error('Error creating user: ' + str(e))
+                abort(500)
         finally:
             conn.close()
     
