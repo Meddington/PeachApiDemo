@@ -110,14 +110,15 @@ class ApiUsers(Resource):
                 c.execute("select user_id from users where user = ?", (json['user'],))
                 
                 if c.rowcount > 0:
-                    abort(400, message = "User not found.")
+                    logger.error('User already exists')
+                    abort(400, message = "User already exists found.")
 
             except HTTPException, e:
                 raise e
             except Exception, e:
                 logger.error('Error creating user: ' + str(e))
-                abort(500)
-
+                abort(500, message = "Error checking if user exists")
+            
             try:
                 c = conn.cursor()
                 # SQL Injection Example
@@ -134,7 +135,7 @@ class ApiUsers(Resource):
                 raise e
             except Exception, e:
                 logger.error('Error creating user: ' + str(e))
-                abort(500)
+                abort(500, message = "Error creating user")
         finally:
             conn.close()
     
@@ -294,7 +295,7 @@ def CreateDb():
         conn.close()
 
 if __name__ == '__main__':
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     
     logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s] %(message)s")
     syslogHandler = logging.handlers.SysLogHandler()
