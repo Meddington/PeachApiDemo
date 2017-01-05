@@ -25,15 +25,14 @@ node {
     {
         try
         {
-            sh  "source venv/bin/activate ; " +
-                "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
+            sh  "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
                 "PEACH_PROFILE=Quick " +
                 "PEACH_CONFIG=/opt/sdk/testrunners/custom/python/peach-web.project " +
                 "PEACH_API=http://127.0.0.1:5000 " +
                 "PEACH_UI=http://52.52.169.252:5000 " +
                 "PEACH_JUNIT=$WORKSPACE/peach-web_test_target.xml " +
                 "PEACH_VERBOSE=True "+
-                "./venv/bin/python /opt/sdk/ci/generic/peach_ci_runner.py"
+                "$WORKSPACE/peach.sh"
         }
         catch(err)
         {
