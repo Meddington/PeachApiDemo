@@ -25,7 +25,7 @@ node {
        {
            sh "ls"
            sh "ls -R"
-            sh "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on test.py\" " +
+            sh "PEACH_AUTOMATION_CMD=\"/usr/local/bin/pytest --peach=on tests.py\" " +
             "PEACH_PROFILE=Quick " +
             "PEACH_CONFIG=/opt/sdk/testrunners/custom/python/peach-web.project " +
             "PEACH_API=http://127.0.0.1:5000 " +
