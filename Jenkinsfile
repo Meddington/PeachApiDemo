@@ -4,14 +4,14 @@ node {
     stage('Build')
     {
         sh "chmod u+rwx *.sh"
-        sh "./build.sh"
+        sh "build.sh"
     }
     stage('Test')
     {
         try
         {
             // Start target service
-            sh "./test.sh"
+            sh "test.sh"
         }
         catch(err)
         {
