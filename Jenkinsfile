@@ -1,9 +1,6 @@
 node {
-   stage('Preparation')
-   {
-       echo "Work work work work...."
-	   sleep(1 * 60) // * 1000)
-   }
+   checkout scm
+
    stage('Build')
    {
        try
@@ -15,14 +12,18 @@ node {
         junit '*.xml'
        }
 	   
-	   sleep(5 * 60)// * 1000)
+	   //sleep(5 * 60)// * 1000)
+   }
+   stage('Test')
+   {
+       echo "Testing..."
    }
    stage('Peach API Security')
    {
    
        try
        {
-            sh "PEACH_AUTOMATION_CMD=\"/usr/bin/python /opt/sdk/testrunners/custom/python/hand_fuzz.py\" " +
+            sh "PEACH_AUTOMATION_CMD=\"pytest --peach=on test.py\" " +
             "PEACH_PROFILE=Quick " +
             "PEACH_CONFIG=/opt/sdk/testrunners/custom/python/peach-web.project " +
             "PEACH_API=http://127.0.0.1:5000 " +
@@ -41,6 +42,6 @@ node {
    stage('Deploy')
    {
        echo "Deploying..."
-	   sleep(5 * 60)// * 1000)
+	   //sleep(5 * 60)// * 1000)
    }
 }
