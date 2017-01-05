@@ -3,6 +3,7 @@ node {
 
     stage('Build')
     {
+        sh "chmod u+rwx *.sh"
         sh "./build.sh"
     }
     stage('Test')
