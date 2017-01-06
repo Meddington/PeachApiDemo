@@ -36,8 +36,6 @@ node {
                 "PEACH_JUNIT=$WORKSPACE/peach-web_test_target.xml " +
                 "PEACH_VERBOSE=False "+
                 "$WORKSPACE/peach.sh"
-            
-            junit healthScaleFactor: 100.0, testResults: '*.xml'
         }
         catch(err)
         {
