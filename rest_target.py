@@ -94,8 +94,8 @@ class ApiUsers(Resource):
         
     def post(self):
         # Comment out for missing authentication vuln
-        #if not self.validateToken():
-        #    abort(401)
+        if not self.validateToken():
+            abort(401)
         
         json = request.get_json(force=True)
         
