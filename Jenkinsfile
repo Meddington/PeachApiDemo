@@ -1,9 +1,7 @@
 node {
-    stage('Checkout')
-    {
-        sh "rm -rf $WORKSPACE/*"
-        checkout scm
-    }
+    sh "rm -rf $WORKSPACE/*"
+    checkout scm
+    
     stage('Build')
     {
         sh "chmod u+rwx $WORKSPACE/*.sh"
