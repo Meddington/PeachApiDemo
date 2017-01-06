@@ -46,9 +46,6 @@ class ApiUsers(Resource):
         return False
     
     def get(self):
-        if not self.validateToken():
-            abort(401)
-
         # Comment out auth check to trigger chail failure
         #if not self.validateToken():
         #    abort(401)
@@ -94,8 +91,8 @@ class ApiUsers(Resource):
         
     def post(self):
         # Comment out for missing authentication vuln
-        #if not self.validateToken():
-        #    abort(401)
+        if not self.validateToken():
+            abort(401)
         
         json = request.get_json(force=True)
         
@@ -124,10 +121,10 @@ class ApiUsers(Resource):
             try:
                 c = conn.cursor()
                 # SQL Injection Example
-                c.execute("insert into users (user, first, last, password) values ('%s', '%s', '%s', '%s')" % (
-                    json['user'], json['first'], json['last'], json['password'] ))
-                #c.execute("insert into users (user, first, last, password) values (?, ?, ?, ?)",
-                #    (json['user'], json['first'], json['last'], json['password'] ))
+                #c.execute("insert into users (user, first, last, password) values ('%s', '%s', '%s', '%s')" % (
+                #    json['user'], json['first'], json['last'], json['password'] ))
+                c.execute("insert into users (user, first, last, password) values (?, ?, ?, ?)",
+                    (json['user'], json['first'], json['last'], json['password'] ))
                 user_id = c.lastrowid
                 conn.commit()
                 
