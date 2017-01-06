@@ -6,6 +6,7 @@
 		{
 			"Url" : "**",
 			"Mutate" : "True",
+      "BaseUrl" : "",
 			"ApiTokens": [
 				{
 					"Name": "X-API-Key",
