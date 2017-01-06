@@ -14,6 +14,6 @@ python setup.py install
 
 cd $WORKSPACE
 
-python /opt/sdk/ci/generic/peach_ci_runner.py
+python /opt/sdk/ci/generic/peach_ci_runner.py || true
 
 # end
